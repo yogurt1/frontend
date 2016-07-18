@@ -1,0 +1,18 @@
+{Router, browserHistory, Route, IndexRoute} = require 'react-router'
+React = require 'react'
+Index = require 'components'
+Error = require 'components/error'
+About = require 'components/About'
+Home = require 'components/Home'
+
+module.exports =
+<Router history={browserHistory}>
+  <Route path='/' component={Index}>
+    <IndexRoute component={Home} />
+    <Route path='about' component={About} />
+    #<Route path='posts' component={Posts}>
+      #<Route path='/post/:postId' component={Posts} />
+    #</Route>
+    <Route path='*' component={Error} />
+  </Route>
+</Router>

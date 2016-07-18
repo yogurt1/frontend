@@ -1,0 +1,111 @@
+// Actions
+#push-sidebar
+  position: fixed
+  top: 15px
+  //left: 155px
+  left: 10px
+  overflow: hidden
+  cursor: pointer
+  z-index: 9000
+  color: #eee
+  font: 30px fontawesome
+  //text-shadow: 1px 1px 1px #bbb
+  transition: transform .3s, left .1s, color .05s ease-in-out, text-shadow .3s linear
+  @media (max-width: 600px)
+    color: #222
+    &:before
+      content: 'Swipe'
+  &:before
+    content: '\f0c9'
+  &:hover
+    text-shadow: 1px 1px 1px #bbb
+  &.open
+    transform: translate3d(255px, 0, 0) rotate(360deg)
+    //-webkit-transform: translateZ(0) rotate(90deg)
+    //-webkit-transform: translateZ(0);
+    //left: 255px
+    text-shadow: 1px 1px 2px #666
+    &:hover
+      text-shadow: 2px 2px 1px #666
+    &:before
+      content: '\f00d'
+    color: #000
+
+#scroll-to-top
+  position: fixed
+  z-index: 5999
+  font-size: 40px
+  bottom: 30px
+  right: 10px
+  height: 10px
+  //width: 30px
+  font: 40px fontawesome
+  //background: #eee
+  //padding: 0 20px 20px 0
+  //padding: 0 10px
+  //width: 30px
+  color: #bbb
+  transition: color .3s linear, text-shadow .3s
+  &:hover
+    color: #fff
+    text-shadow: 1px 1px 1px #aaa
+  &:before
+    content: '\f106'
+  @media (max-width: 600px)
+    color: #333
+    &:hover
+      color: #111
+
+// Social
+#github,
+#instagram,
+#email,
+#twitter,
+#pocket,
+#slack,
+#star,
+  font: 25px fontawesome
+  color: black
+  padding-left: 7px
+  padding-right: 7px
+  text-decoration: none
+  transition: text-shadow .3s
+  &:hover
+    //background: rgba(0,0,0,.1)
+    text-shadow: 1px 1px 2px #666
+  &:first-child
+    padding-left: 0
+  &:last-child
+    padding-right: 0
+
+#github:before
+  content: 'GitHub'
+  content: '\f09b'
+
+#instagram:before
+  content: 'Instagram'
+  content: '\f16d'
+
+#email:before
+  content: 'E-mail'
+  content: '\f0e0'
+  
+#twitter:before
+  content: 'Twitter'
+  content: '\f099'
+  
+#pocket:before
+  content: 'Pocket'
+  content: '\f265'
+  
+#slack:before
+  content: 'Slack'
+  content: '\f198'
+  
+#star:before
+  content: 'Star'
+  content: '\2605'
+    
+#up:before
+  content: 'Up'
+  content: '\f106'
