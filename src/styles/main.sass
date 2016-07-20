@@ -1,0 +1,39 @@
+@import 'variables'
+@import 'fonts'
+//@import 'sprites'
+
+html, body
+  font: 100% $sans
+  background: #031616
+
+.loader
+  border-radius: 50%
+  color: #f6e9e9
+  font-size: 11px
+  text-ident: -99999em
+  margin: 55px auto
+  position: relative
+  width: 10em
+  height: 10em
+  box-shadow: inset 0 0 0 1em
+  transform: translate3d(0,0,0)
+  &:before
+    width: 5.2em
+    height: 10.2em
+    border-radius: 10.2em 0 0 10.2em
+    top: -0.1em
+    left: -0.1em
+    animation loader 2s infinite ease 1.5s
+  &:after
+    width: 5.2em
+    height: 10.2em
+    top: -0.1em
+    left: 5.1em
+    transform-origin: 0px 5.1em
+    animation: loaders 2s infinite ease
+
+@keyframes loader
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)
