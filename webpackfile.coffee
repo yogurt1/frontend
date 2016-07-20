@@ -14,7 +14,7 @@ HtmlPlugin = require 'html-webpack-plugin'
 OfflinePlugin = require 'offline-plugin'
 
 styles =
-  plugin: new ExtractTextPlugin filename: 'static/styles.[chunkhash].css', allChunks: on
+  plugin: new ExtractTextPlugin filename: 'static/styles.[hash].css', allChunks: on
   extract: (loader) -> if production then @plugin.extract {dontExtractLoader: 'style', loader} else "style!#{loader}"
   common: 'css?minimize&sourceMap&importLoaders=1'
   sass: -> @common + '&modules' + '!postcss!sass?sourceMap'
@@ -47,6 +47,11 @@ plugins =
       compress: warnings: off
       mangle: on
       screw_ie8: on
+      sourceMap: on
+    new OfflinePlugin
+      AppCache:
+        publicPath: ''
+        directory: ''
   ]
   prefetch: do -> new webpack.PrefetchPlugin module  for module in [
     'react', 'redux', 'react-router', 'react-dom', 'lodash'
@@ -58,7 +63,8 @@ plugins =
     #"babel-polyfill"
   ]
   postcss: [
-    require('autoprefixer')(['last 2 versions'])
+    #require('autoprefixer')(['last 2 versions'])
+    require 'postcss-cssnext'
     require 'postcss-svgo'
     require 'postcss-circle'
     require 'postcss-center'
@@ -67,13 +73,15 @@ plugins =
     require 'postcss-instagram'
     #require 'postcss-sprites'
     #require 'cssnano'
+  ].concat if not production then [] else [
+    require 'postcss-styleguide'
   ]
   expose: [{
     test: require.resolve 'react'
     loader: 'expose?React'
   },{
     test: require.resolve 'redux'
-    loader: 'expose?React'
+    loader: 'expose?Redux'
   }]
 
 reacthot = if production then [] else ['react-hot']
@@ -122,17 +130,18 @@ config =
   target: 'web'
   entry:
     bundle: ['./src/entry'].concat if not production then plugins.devserver else []
-    vendor: ['react', 'redux', 'react-router', 'react-redux', 'react-dom', 'redux-logger']
+    vendor: ['lodash/extend', 'react', 'redux', 'react-router', 'react-redux', 'react-dom', 'redux-logger']
   devtool: if production then 'source-map' else 'eval-source-map'
   devServer:
     hot: on
     inline: on
     stats: 'error-only'
+    contentBase: 'dist'
     historyApiFallback: off
     proxy:
-      '/post*': target: publicPath, secure: false
-      '/site*': target: publicPath, secure: false
-      '/fonts*': target: publicPath, secure: false
+      '/post*': target: api, secure: false
+      '/site*': target: api, secure: false
+      '/fonts*': target: api, secure: false
   debug: production
   postcss: -> plugins.postcss
   sassLoader:
@@ -140,10 +149,10 @@ config =
   output:
     path: resolve './dist'
     publicPath: if production then publicPath else ''
-    filename: 'static/[name].[chunkhash].js'
-    chunkFilename: 'static/[name].[chunkhash].js'
+    filename: 'static/[name].[hash].js'
+    chunkFilename: 'static/[name].[hash].js'
     sourcemapFilename: 'static/[name].map'
-    sourceMapFilename: 'static/[name].map'
+    #sourceMapFilename: 'static/[name].map'
     libraryTarget: "umd"
   resolve:
     extensions: ['', '.js', '.cjsx', '.coffee', '.cson', '.sass', '.css']
@@ -164,13 +173,9 @@ config =
     plugins.common...
     plugins.prefetch...
     styles.plugin
-    new OfflinePlugin
-      AppCache:
-        publicPath: ''
-        directory: ''
     new webpack.optimize.CommonsChunkPlugin
       name: 'vendor'
-      filename: 'static/[name].[chunkhash].js'
+      filename: 'static/[name].[hash].js'
     new HtmlPlugin
       template: './src/assets/index.html.coffee'
       cache: yes

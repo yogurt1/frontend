@@ -12,4 +12,11 @@ serve:
 watch:
 	@$(NPM)/webpack --watch ${ARGS}
 
+clean:
+	@rm -rf dist ../web/static
+
+web:
+	@rm -rf ../web/static
+	@cp -R dist/* ../web
+
 .PHONY: all test clean doc build watch

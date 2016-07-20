@@ -1,16 +1,16 @@
 {createStore, combineReducers, applyMiddleware} = require 'redux'
-thunk = require 'redux-thunk'
-createLogger = require 'redux-logger'
 reducers = require 'reducers'
+initialState = counter: 0
 
-_devtools = window.devToolsExtension and window.devToolsExtension()
-initialState = switch production
-  when not true then _devtools
-  else {}
+middlewares = [
+  #require 'redux-thunk'
+].concat if production then [] else [
+  require('redux-logger')(level: 'info', collapsed: yes)
+]
 
-store = createStore reducers, initialState, if not production
-  applyMiddleware createLogger
-    level: 'info', collapsed: true
+store = createStore reducers, initialState, switch middlewares[0]
+  when not undefined then applyMiddleware middlewares
+  else undefined
 
 store.dispatch type: 'INCR'
 store.dispatch type: 'INCR'

@@ -1,8 +1,8 @@
-@import 'common'
+@import '../variables'
 $gutter: 15px
 
 div.wrap
-  border: 1px solid green
+  border: 1px solid blue($bgcolor)
   margin: 20px 20px
 
 span.from
@@ -15,6 +15,6 @@ span.from
 p.text
   font: 1em $serif
   left: 3px
-  color: #333
+  color: $fgcolor
   margin-left: $gutter
   margin-top: $gutter + 10px

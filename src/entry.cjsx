@@ -6,8 +6,6 @@
 store = require './store'
 routes = require './routes'
 
-#onUpdate = -> store.dispatch routerStateChange @state
-
 app =
   <Provider store={store}>
     <Router routes={routes} history={hashHistory}/>
@@ -15,4 +13,4 @@ app =
 
 render app, document.querySelector '#root'
 
-do require('offline-plugin/runtime').install
+if production then do require('offline-plugin/runtime').install

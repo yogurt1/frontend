@@ -1,5 +1,5 @@
 module.exports = """<!DOCTYPE html>
-<html lang="ru" manifest="manifest.appcache">
+<html lang="ru" #{if production then 'manifest="manifest.appcache"'}>
 <head>
   <title>guestbook</title>
   <meta charset="UTF=8">

@@ -3,7 +3,7 @@ Index = require 'components'
 Error = require 'components/pages/Error'
 About = require 'components/pages/About'
 Home = require 'components/pages/Home'
-#Posts = require 'components/pages/Posts'
+Posts = require 'components/pages/Posts'
 
 
 module.exports =
@@ -11,7 +11,7 @@ module.exports =
   <Route path='/' component={Index}>
     <IndexRoute component={Home} />
     <Route path='about' component={About} />
-    {#<Route path='posts' component={Posts} />}
+    <Route path='posts' component={Posts} />
     <Route path='*' component={Error} />
   </Route>
 </Router>

@@ -3,7 +3,7 @@
 Post = require 'components/Post'
 getPost = require 'lib/getPost'
 
-posts = for id in [1..3] then JSON.parse getPost id
+posts = for id in [1..3] then getPost id
 
 module.exports = class Posts extends Component
   render: ->
