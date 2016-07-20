@@ -1,7 +1,7 @@
 {Component} = React = require 'react'
 {Link} = require 'react-router'
 
-{link} = require 'styles/blocks/header'
+{link} = require 'styles/pages/index'
 
 module.exports = class NavLink extends Component
   render: ->

@@ -3,7 +3,6 @@
 {Router, hashHistory} = require 'react-router'
 {Provider} = require 'react-redux'
 
-styles = require 'styles/global' #prepend global styles
 store = require './store'
 routes = require './routes'
 
@@ -15,3 +14,5 @@ app =
   </Provider>
 
 render app, document.querySelector '#root'
+
+do require('offline-plugin/runtime').install
