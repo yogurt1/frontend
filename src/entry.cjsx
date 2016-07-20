@@ -1,4 +1,4 @@
-React = require 'react'
+#React = require 'react'
 {render} = require 'react-dom'
 {Router, hashHistory} = require 'react-router'
 {Provider} = require 'react-redux'

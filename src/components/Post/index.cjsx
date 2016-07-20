@@ -1,5 +1,5 @@
-{PropTypes, Component} = React = require 'react'
-{wrap, from, text} = require 'styles/post'
+{PropTypes, Component} = React
+{wrap, from, text} = require 'styles/blocks/post'
 #File = require 'components/File'
 
 module.exports = class Post extends Component

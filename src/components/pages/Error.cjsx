@@ -1,5 +1,5 @@
 {Component} = React = require 'react'
-error = require 'styles/error'
+error = require 'styles/pages/error'
 
 module.exports = class Error extends Component
   render: -> <div>

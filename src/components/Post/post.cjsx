@@ -1,5 +1,5 @@
-{PropTypes, Component} = React = require 'react'
-{post} = require 'styles/post'
+{PropTypes, Component} = React
+{post} = require 'styles/blocks/post'
 File = require 'components/File'
 
 

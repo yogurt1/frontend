@@ -1,22 +1,24 @@
 # coffeelint: disable=max_line_length
 webpack = require 'webpack'
 {join, resolve} = require 'path'
-{extend} = require 'underscore'
+extend = require 'lodash/extend'
 fs = require 'fs'
 
-publicPath = 'http://localhost/~bsdfun/guestbook/web/'
+api = 'http://localhost/~bsdfun/guestbook/web/'
+publicPath = ''
 
 #merge = require 'webpack-merge'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
-ProgressBarPlugin = require 'progress-bar-webpack-plugin'
+#ProgressBarPlugin = require 'progress-bar-webpack-plugin'
+HtmlPlugin = require 'html-webpack-plugin'
+OfflinePlugin = require 'offline-plugin'
 
 styles =
-  plugin: new ExtractTextPlugin 'styles.css', allChunks: on
-  extract: (loader) -> if production then @plugin.extract('style', loader) else "style!#{loader}"
+  plugin: new ExtractTextPlugin filename: 'styles.[chunkhash].css', allChunks: on
+  extract: (loader) -> if production then @plugin.extract {dontExtractLoader: 'style', loader} else "style!#{loader}"
   common: 'css?sourceMap&importLoaders=1'
-  sass: @common + '&modules' + '!postcss!sass?sourceMap'
-  ref: @common + '!postcss!sass-loader-once?sourceMap'
-  css: @common + '&modules!postcss'
+  sass: -> @common + '&modules' + '!postcss!sass?sourceMap'
+  css: -> @common + '&modules!postcss'
 
 {NODE_ENV} = process.env
 production = NODE_ENV is 'production'
@@ -24,7 +26,10 @@ production = NODE_ENV is 'production'
 # Plugins
 plugins =
   common: [
-    #    new ProgressBarPlugin()
+    new webpack.ProvidePlugin
+      React: 'react'
+      'window.React': 'react'
+
     new webpack.DefinePlugin
       "process.env.NODE_ENV": JSON.stringify NODE_ENV
       "production": JSON.stringify production
@@ -43,6 +48,9 @@ plugins =
       mangle: on
       screw_ie8: on
   ]
+  prefetch: for module in [
+    'react', 'redux', 'react-router', 'react-dom', 'lodash'
+  ] then new webpack.PrefetchPlugin module
   devserver: [
     #"webpack-dev-server/client?http://localhost:8080"
     #"webpack/hot/only-dev-server"
@@ -64,7 +72,7 @@ plugins =
     test: require.resolve 'react'
     loader: 'expose?React'
   },{
-    test: require.resolve 'backbone'
+    test: require.resolve 'redux'
     loader: 'expose?React'
   }]
 
@@ -79,7 +87,8 @@ loaders = [{
   query: presets: ['es2015', 'stage-0', 'react']
 },{
   test: /\.cjsx$/
-  loaders: reacthot.concat ['coffee', 'cjsx']
+  #loaders: reacthot.concat ['coffee', 'cjsx']
+  loaders: ['coffee', 'cjsx']
   exclude: /node_modules/
 },{
   test: /\.coffee$/
@@ -90,30 +99,30 @@ loaders = [{
   loader: 'cson'
 },{
   test: /\.(scss|sass)$/
-  loader: styles.extract styles.common + styles.sass
-},{
-  test: /\.ref.(scss|sass)$/
-  loader: styles.extract styles.common + styles.ref
+  loader: styles.extract do styles.sass
 },{
   test: /\.css$/
-  loader: styles.extract styles.common + styles.css
+  loader: styles.extract do styles.css
 },{
   test: /\.md$/
-  loader: 'html!markdown'
+  loader: 'markdown'
 },{
-  test: /\.(png|jpg|ico|svg|woff(2))$/
-  loader: 'url?limit=50000'
+  test: /\.(eot|ttf|woff(2))$/
+  loader: 'url?limit=100000'
 },{
-  test: /\.(eot|ttf|woff(2))/
-  loader: 'file?name=fonts/[name].[ext]'
+  test: /\.(png|jpg|ico|svg)$/
+  loader: 'url?limit=100000!image-webpack?optimizationLevel=9'
+},{
+  test: /\.(png|jpg|ico|svg|eot|ttf|woff(2))/
+  loader: 'file?name=static/[name].[hash].[ext]'
 }]
-
-config =
+  
+module.exports =
   name: 'Guestbook'
   target: 'web'
   entry:
     bundle: ['./src/entry'].concat if not production then plugins.devserver else []
-    #material: ['react-mdl/extra/material.js', 'react-mdl/extra/material.css']
+    vendor: ['react', 'redux', 'react-router', 'react-redux', 'react-dom', 'redux-logger']
   devtool: if production then 'source-map' else 'eval-source-map'
   devServer:
     hot: on
@@ -128,14 +137,14 @@ config =
   postcss: -> plugins.postcss
   sassLoader:
     includePath: [resolve __dirname, './node_modules']
-    #importer: importonce
   output:
-    path: if production then join __dirname, '../web' else ''
-    publicPath: if production then publicPath else '' 
-    filename: '[name].js'
+    path: resolve './dist'
+    publicPath: if production then publicPath else ''
+    filename: 'static/[name].[chunkhash].js'
+    chunkFilename: 'static/[name].[chunkhash].js'
+    sourcemapFilename: 'static/[name].map'
+    sourceMapFilename: 'static/[name].map'
     libraryTarget: "umd"
-  cache: on
-  query: cache: on
   resolve:
     extensions: ['', '.js', '.cjsx', '.coffee', '.cson', '.sass', '.css']
     alias: extend {
@@ -144,21 +153,25 @@ config =
       'lib': resolve './src/lib'
       'reducers': resolve './src/reducers'
       'actions': resolve './src/actions'
+      'images': resolve './src/assets/images'
+      'fonts': resolve './src/assets/fonts'
     }, if production then {
       'react': 'react-lite'
       'react-dom': 'react-lite'
     }
-  #resolveLoader: modulesDirectories: ['node_modules']
-  module: loaders: loaders.concat if production then plugins.expose else []
-    #.concat plugins.expose if not production
+  module: loaders: loaders.concat if not production then plugins.expose else []
   plugins: [
     plugins.common...
+    plugins.prefetch...
     styles.plugin
-    #html
-    #new webpack.optimize.CommonsChunkPlugin
-    # name: 'vendor'
-    # filename: 'vendor.js'
+    new OfflinePlugin()
+    new webpack.optimize.CommonsChunkPlugin
+      name: 'vendor'
+      filename: 'static/[name].[chunkhash].js'
+    new HtmlPlugin
+      template: './src/assets/index.html.coffee'
+      cache: yes
+      hash: yes
     plugins[if production then 'production' else 'development']...
   ]
 
-module.exports = config

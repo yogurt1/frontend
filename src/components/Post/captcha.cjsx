@@ -1,4 +1,4 @@
-{Component} = React = require 'react'
+{Component} = React
 
 module.exports = class Captcha extends Component
   render: -> <form method="post" action="site/validate" role="form">

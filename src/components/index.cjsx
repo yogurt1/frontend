@@ -3,7 +3,7 @@
 {Link} = require 'react-router'
 NavLink = require './navlink'
 
-{nav, wrap} = require 'styles/menu'
+{nav, wrap} = require 'styles/pages/index' #+transition
 space = ' '
 
 module.exports = class Index extends Component

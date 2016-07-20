@@ -1,5 +1,5 @@
 {Component, createElement} = React = require 'react'
-{extend} = require 'underscore'
+extend = require 'lodash/extend'
 
 module.exports = class Image extends Component
   constructor: (props) ->

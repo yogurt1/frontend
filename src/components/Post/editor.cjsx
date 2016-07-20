@@ -1,5 +1,5 @@
-{Component} = React = require 'react'
-{editor} = require 'styles/post/editor'
+{Component} = React
+{editor} = require 'styles/blocks/post'
 
 module.exports = class Editor extends Component
   render: ->

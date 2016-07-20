@@ -1,5 +1,5 @@
 {Component} = React = require 'react'
-{extend} = require 'underscore'
+extend = require 'lodash/extend'
 
 check = require 'lib/checkFile'
 dtob = require 'lib/dtob'

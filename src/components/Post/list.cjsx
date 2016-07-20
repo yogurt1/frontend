@@ -1,4 +1,4 @@
-{PropTypes} = React = require 'react'
+{PropTypes} = React
 Post = require './post'
 
 PostList = (posts, onPostClick = {}) -> <main>
