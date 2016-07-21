@@ -16,7 +16,12 @@ getPost: (id) -> (dispatch, getState) ->
   dispatch type: 'GET_POST_REQUEST'
   #dispatch {type: GET_POST, id}
 
-  fetch "posts/#{id}"
+  _json = 'application/json'
+  headers = new Headers
+  headers.append 'Content-Type', _json
+  headers.append 'Accept', _json
+
+  fetch "posts/#{id}", {headers}
     .then (res) ->
       if not res.ok then throw Error res.statusText
       else res
