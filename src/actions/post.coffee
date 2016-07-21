@@ -16,7 +16,7 @@ getPost: (id) -> (dispatch, getState) ->
   dispatch type: 'GET_POST_REQUEST'
   #dispatch {type: GET_POST, id}
 
-  fetch "/posts/#{id}"
+  fetch "posts/#{id}"
     .then (res) ->
       if not res.ok then throw Error res.statusText
       else res
