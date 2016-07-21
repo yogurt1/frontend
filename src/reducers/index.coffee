@@ -3,8 +3,6 @@
 reducers = {}
 skip = [
   'index'
-  'validate'
-  'posts'
 ]
 
 req = require.context '.', yes, /\.(coffee)$/

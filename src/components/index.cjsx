@@ -14,6 +14,7 @@ module.exports = class Index extends Component
         <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
         <NavLink to="/posts">Posts</NavLink>
+        <NavLink to="/counter">Counter</NavLink>
       </ul>
     </nav>
   </header>

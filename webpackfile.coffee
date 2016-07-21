@@ -32,11 +32,12 @@ plugins =
 
     new webpack.DefinePlugin
       "process.env.NODE_ENV": JSON.stringify NODE_ENV
+      "NODE_ENV": JSON.stringify NODE_ENV
       "production": JSON.stringify production
       "__DEV__": JSON.stringify production
   ]
   development: [
-    #new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin()
     new webpack.HotModuleReplacementPlugin()
   ]
   production: [
@@ -44,9 +45,12 @@ plugins =
     new webpack.optimize.AggressiveMergingPlugin(),
     #new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin
-      compress: warnings: off
+      compress:
+        drop_console: on
+        unsafe: on
+      # warnings: off
       mangle: on
-      screw_ie8: on
+      #screw_ie8: on
       sourceMap: on
     new OfflinePlugin
       AppCache:

@@ -11,10 +11,9 @@ GET_POST_FAILURE: 'GET_POST_FAILURE'
 # Actions
 getPost: (id) -> (dispatch, getState) ->
   # {posts} = getState()
-  #if posts[id]? then return
+  #if posts[id-1]? then return
 
-  dispatch type: 'GET_POST_REQUEST'
-  #dispatch {type: GET_POST, id}
+  dispatch type: actions.GET_POST_REQUEST
 
   _json = 'application/json'
   headers = new Headers
@@ -28,7 +27,7 @@ getPost: (id) -> (dispatch, getState) ->
     .then (res) ->
       res.json()
     .then (json) ->
-      dispatch type: actions.GET_POST_SUCCESS, post: json
+      dispatch type: actions.GET_POST_SUCCESS, payload: json
     .then null, (err) ->
       dispatch type: actions.GET_POST_FAILURE, errors: err
 
