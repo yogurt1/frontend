@@ -1,7 +1,7 @@
-{
-  INCR
-  DECR
-} = {counter} = require 'actions'
+# {
+#  INCR
+#  DECR
+#} = require 'action/counter'
 
 initialState = 0
 

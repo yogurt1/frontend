@@ -1,5 +1,5 @@
-{validate, status} = require 'actions'
-{extend} = require 'underscore'
+# {validate, status} = require 'actions'
+extend = require 'lodash/extend'
 
 {VALIDATE_USER_FIELDS, } = validate
 {SUCCESS, FAILURE, RESET} = status

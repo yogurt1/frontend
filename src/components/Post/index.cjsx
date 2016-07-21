@@ -10,7 +10,7 @@ module.exports = class Post extends Component
     #body: PropTypes.string.isRequired
 
   render: ->
-    {user, email, body} = @props.data
+    {user, email, body} = @props.post
     <div className={wrap}>
       <span className={from}>{user} <{email}></span>
       <p className={text}>{body}</p>
