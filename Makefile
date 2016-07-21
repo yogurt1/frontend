@@ -7,7 +7,8 @@ build:
 	@env NODE_ENV=production $(NPM)/webpack ${ARGS}
 
 serve:
-	@$(NPM)/webpack-dev-server ${ARGS}
+	@#$(NPM)/webpack-dev-server ${ARGS}
+	@$(NPM)/coffee server.coffee ${ARGS}
 
 watch:
 	@$(NPM)/webpack --watch ${ARGS}

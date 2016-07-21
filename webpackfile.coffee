@@ -15,7 +15,7 @@ OfflinePlugin = require 'offline-plugin'
 
 styles =
   plugin: new ExtractTextPlugin filename: 'static/styles.[hash].css', allChunks: on
-  extract: (loader) -> if production then @plugin.extract {dontExtractLoader: 'style', loader} else "style!#{loader}"
+  extract: (loader) -> if production then @plugin.extract {fallbackLoader: 'style', loader} else "style!#{loader}"
   common: 'css?minimize&sourceMap&importLoaders=1'
   sass: -> @common + '&modules' + '!postcss!sass?sourceMap'
   css: -> @common + '&modules!postcss'
@@ -36,7 +36,7 @@ plugins =
       "__DEV__": JSON.stringify production
   ]
   development: [
-    new webpack.NoErrorsPlugin()
+    #new webpack.NoErrorsPlugin()
     new webpack.HotModuleReplacementPlugin()
   ]
   production: [
@@ -57,8 +57,9 @@ plugins =
     'react', 'redux', 'react-router', 'react-dom', 'lodash'
   ]
   devserver: [
-    #"webpack-dev-server/client?http://localhost:8080"
-    #"webpack/hot/only-dev-server"
+    #"react-hot-loader/patch"
+    "webpack-dev-server/client?http://localhost:3000"
+    "webpack/hot/only-dev-server"
     #"webpack-hot-middleware/client"
     #"babel-polyfill"
   ]
@@ -95,8 +96,7 @@ loaders = [{
   query: presets: ['es2015', 'stage-0', 'react']
 },{
   test: /\.cjsx$/
-  #loaders: reacthot.concat ['coffee', 'cjsx']
-  loaders: ['coffee', 'cjsx']
+  loaders: reacthot.concat ['coffee', 'cjsx']
   exclude: /node_modules/
 },{
   test: /\.coffee$/
@@ -138,11 +138,16 @@ config =
     stats: 'error-only'
     contentBase: 'dist'
     historyApiFallback: off
+    colors: on
+    noInfo: yes
+    progress: yes
+    progress: on
+    port: 3000
     proxy:
-      '/post*': target: api, secure: false
-      '/site*': target: api, secure: false
-      '/fonts*': target: api, secure: false
-  debug: production
+      '/post': target: api, secure: false
+      '/site': target: api, secure: false
+      '/fonts': target: api, secure: false
+  debug: off #production
   postcss: -> plugins.postcss
   sassLoader:
     includePath: [resolve __dirname, './node_modules']

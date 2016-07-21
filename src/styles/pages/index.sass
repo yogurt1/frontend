@@ -1,21 +1,26 @@
 @import "../variables"
 
-nav.wrap
-  //justify-content: center
-  //width: 50%
+.wrap
+  display: flex
+  justify-content: center
   //margin: 0 auto
-  //border: 3px solid invert(#333)
-  border: 3px solid blue
-  margin: 0 auto
+  border: 1px solid lighten($bgcolor, 30%)
 
-ul.nav
+
+.nav
   list-style-type: none
   display: flex
   flex-direction: row
 
-li.link
+.link
   flex: 0 1
+  //color: invert($bgcolor)
   & > a
     //color: red(#333)
-    color: invert($bgcolor)
+    text-transform: uppercase
+    text-decoration: none
+    font-size: 130%
+    color: saturate($fgcolor, 55%)
     padding: 0.3rem 0.3rem
+    &:visited
+      text-decoration: inherit
